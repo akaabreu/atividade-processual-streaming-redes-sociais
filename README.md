@@ -1,18 +1,18 @@
-# Pub/Sub — Streaming e Redes Sociais
+# Pub/Sub em streaming e redes sociais
 
-Projeto acadêmico que demonstra o padrão **Publish/Subscribe (Pub/Sub)** em uma plataforma fictícia de streaming e redes sociais.
+Este projeto apresenta uma implementação simples do padrão Publish/Subscribe (Pub/Sub) aplicada a uma plataforma fictícia de streaming e redes sociais.
 
 ## Identificação
 
-- **Disciplina:** Sistemas Computacionais Distribuídos e Computação em Nuvem
-- **Professora:** Ana Paula
-- **Integrantes:** Marcos Paulo, Marcos Vinicius e Marcos
+- Disciplina: Sistemas Computacionais Distribuídos e Computação em Nuvem
+- Professora: Ana Paula
+- Integrantes: Marcos Paulo, Marcos Vinicius e Marcos
 
-## Cenário escolhido
+## Cenário
 
-Criadores de conteúdo publicam vídeos, posts ou transmissões em categorias como `Tech` e `Games`. Os usuários assinam somente os assuntos que desejam acompanhar e recebem automaticamente as novas publicações. Ao cancelar uma inscrição, o usuário deixa de receber os conteúdos daquele tópico.
+Na plataforma, criadores publicam vídeos, posts e transmissões em categorias como `Tech` e `Games`. Cada usuário escolhe os tópicos que deseja acompanhar. Quando um conteúdo novo é publicado, somente os usuários inscritos naquele tópico recebem a notificação.
 
-O criador não conhece os usuários que receberão a mensagem. Toda a comunicação é intermediada pelo broker `PubSub`, reduzindo o acoplamento entre os componentes.
+O criador envia o conteúdo ao broker sem precisar conhecer os usuários. O broker controla as inscrições e distribui cada mensagem para os assinantes corretos. Se um usuário cancelar a inscrição, ele deixa de receber as próximas publicações daquele tópico.
 
 ## Arquitetura
 
@@ -25,76 +25,58 @@ flowchart LR
     T2 --> S1
 ```
 
-| Componente | Implementação no projeto |
+| Componente | Uso no projeto |
 |---|---|
 | Publisher | Classe `CriadorConteudo` |
 | Broker | Classe `PubSub` |
-| Topics | `Tech` e `Games` |
+| Tópicos | `Tech` e `Games` |
 | Subscribers | Objetos da classe `Usuario` |
 
-O broker implementa os três métodos exigidos:
+A classe `PubSub` possui os três métodos principais do padrão:
 
-- `subscribe(topico, assinante)`: registra um assinante;
-- `publish(topico, mensagem)`: envia a mensagem aos assinantes ativos;
-- `unsubscribe(topico, assinante)`: remove a inscrição.
+- `subscribe(topico, assinante)` inscreve um usuário em um tópico;
+- `publish(topico, mensagem)` entrega a mensagem aos assinantes ativos;
+- `unsubscribe(topico, assinante)` cancela uma inscrição.
 
-## Estrutura dos arquivos
+## Arquivos do projeto
 
 ```text
 .
-├── main.py                    # simulação completa
-├── modelos.py                 # Publisher e Subscriber
-├── pubsub.py                  # Broker Pub/Sub
-├── test_pubsub.py             # testes automatizados
-├── ROTEIRO_APRESENTACAO.md    # divisão sugerida da apresentação
+├── main.py          # executa a simulação
+├── modelos.py       # contém o Publisher e o Subscriber
+├── pubsub.py        # contém o broker Pub/Sub
+├── test_pubsub.py   # testes automatizados
 └── README.md
 ```
 
 ## Como executar
 
-### Requisito
+O projeto requer Python 3.10 ou superior e não utiliza bibliotecas externas.
 
-- Python 3.10 ou superior.
-
-Não há bibliotecas externas para instalar.
-
-### Demonstração
-
-No terminal, dentro da pasta do projeto, execute:
+Abra o terminal na pasta do projeto e execute:
 
 ```bash
 python main.py
 ```
 
-Em alguns sistemas, o comando pode ser:
+Se o sistema usar o comando `python3`, execute:
 
 ```bash
 python3 main.py
 ```
 
-A execução demonstra esta sequência:
+Durante a simulação, os usuários assinam os tópicos `Tech` e `Games`, os criadores publicam novos conteúdos e o broker envia as notificações. Depois, Marcos Vinicius cancela sua inscrição em `Games`. A publicação seguinte é entregue apenas a Marcos, que continua inscrito nesse tópico.
 
-1. usuários assinam os tópicos `Tech` e `Games`;
-2. criadores publicam conteúdos;
-3. somente os inscritos no tópico recebem cada conteúdo;
-4. Marcos Vinicius cancela a inscrição em `Games`;
-5. uma nova publicação é feita em `Games`;
-6. Marcos Vinicius não recebe mais a mensagem desse tópico.
+## Testes
 
-### Testes automatizados
+Para executar os testes automatizados:
 
 ```bash
 python -m unittest -v
 ```
 
-Os testes verificam inscrição, publicação, separação entre tópicos, cancelamento, duplicidade e validação de tópico vazio.
+Os testes verificam a inscrição de usuários, o envio de mensagens, a separação entre tópicos, o cancelamento de inscrições, a prevenção de duplicidades e a validação de tópicos vazios.
 
-## Conceitos demonstrados
+## Observação
 
-- comunicação orientada a eventos;
-- desacoplamento entre publishers e subscribers;
-- distribuição de mensagens por tópicos;
-- inscrição e desinscrição dinâmica;
-- um evento entregue a múltiplos destinatários.
-
-> Esta é uma simulação didática em memória. Em um ambiente distribuído real, o broker poderia ser substituído por tecnologias como Apache Kafka, RabbitMQ ou Redis Pub/Sub.
+Esta implementação mantém os dados em memória e foi criada para demonstrar o funcionamento do padrão Pub/Sub. Em um sistema distribuído real, o broker poderia ser implementado com Apache Kafka, RabbitMQ ou Redis Pub/Sub.
