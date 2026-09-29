@@ -5,8 +5,7 @@ Este projeto apresenta uma implementação simples do padrão Publish/Subscribe 
 ## Identificação
 
 - Disciplina: Sistemas Computacionais Distribuídos e Computação em Nuvem
-- Professora: Ana Paula
-- Integrantes: Marcos Paulo, Marcos Vinicius e Marcos
+- Integrantes: Marcos Paulo Maciel de Abreu, Marcos Vinicius Lima Machado e Marcos Vinicius Alencar Rodrigues
 
 ## Cenário
 
